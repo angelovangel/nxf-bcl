@@ -120,7 +120,7 @@ process bcl {
 
     input:
         path x from runfolder_bcl
-        path y from samplesheet_ch
+        //path y from samplesheet_ch
 
     // path is preferred over file as an output qualifier
     output:
@@ -134,8 +134,8 @@ process bcl {
     --sample-sheet ${params.samplesheet} \
     --no-lane-splitting \
     --ignore-missing-bcls \
-    -r ${params.load_threads}
-    -p ${params.proc_threads}
+    -r ${params.load_threads} \
+    -p ${params.proc_threads} \
     -w ${params.write_threads}
     """
 }
