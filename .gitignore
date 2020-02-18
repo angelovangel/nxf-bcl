@@ -3,3 +3,4 @@ testdata
 results
 work
 .nextflow*
+nextflow-private*
