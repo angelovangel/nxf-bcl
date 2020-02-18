@@ -11,6 +11,9 @@ ANSI_RESET = "\033[0m"
  * pipeline input parameters
  */
 // use bcl test data from https://github.com/roryk/tiny-test-data/tree/master/flowcell
+ 
+// get docker ncores, not nextflow env ncores!!
+ int ncores = Runtime.getRuntime().availableProcessors(); 
 
  params.runfolder = ""
  params.samplesheet = "${params.runfolder}/SampleSheet.csv"
@@ -50,6 +53,7 @@ log.info """
          Running as user:        ${ANSI_GREEN}${workflow.userName}${ANSI_RESET}
          Launch dir:             ${ANSI_GREEN}${workflow.launchDir}${ANSI_RESET}
          Base dir:               ${ANSI_GREEN}${baseDir}${ANSI_RESET}
+         Number of cores:        ${ANSI_GREEN}${ncores}${ANSI_RESET}
          Nextflow version        ${ANSI_GREEN}${nextflow.version}${ANSI_RESET}
          """
          .stripIndent()
@@ -113,9 +117,8 @@ process interop {
 
 // I want to print the ncores and nsamples to adjust the bcl2fastq parameters in subsequent runs
 process bcl {
-    int ncores = Runtime.getRuntime().availableProcessors(); 
 
-    tag "bcl2fastq, ${ncores} cores detected"
+    tag "bcl2fastq"
     publishDir params.outdir, mode: 'copy', pattern: '**fastq.gz'
 
     input:
@@ -129,8 +132,10 @@ process bcl {
 
     // default to --ignore-missing all?
     script:
+    
     """
-    bcl2fastq -R $x -o fastq \
+    bcl2fastq -R $x \
+    -o fastq \
     --sample-sheet ${params.samplesheet} \
     --no-lane-splitting \
     --ignore-missing-bcls \
