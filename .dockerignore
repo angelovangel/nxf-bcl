@@ -4,3 +4,4 @@ work
 results
 .DS_Store
 nextflow-private*
+testdata

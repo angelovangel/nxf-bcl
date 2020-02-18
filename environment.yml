@@ -3,7 +3,6 @@ channels:
   - conda-forge
   - dranew
   - bioconda
-  - defaults
 dependencies:
   - bcl2fastq
   - illumina-interop
