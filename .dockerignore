@@ -1,7 +1,7 @@
 .git*
 .nextflow*
 work
-results
+results*
 .DS_Store
 nextflow-private*
 testdata

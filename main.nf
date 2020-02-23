@@ -13,11 +13,11 @@ ANSI_RESET = "\033[0m"
 // use bcl test data from https://github.com/roryk/tiny-test-data/tree/master/flowcell
  
 // get docker ncores, not nextflow env ncores!!
- int ncores = Runtime.getRuntime().availableProcessors(); 
+ int ncores   = Runtime.getRuntime().availableProcessors(); 
 
  params.runfolder = ""
  params.samplesheet = "${params.runfolder}/SampleSheet.csv"
- params.outdir = "$workflow.launchDir/results"
+ params.outdir = "$workflow.launchDir/results-bcl"
  params.title = "InterOp and bcl2fastq summary"
  params.multiqc_config = "$baseDir/multiqc_config.yml" //in case ncct multiqc config needed
  params.help = ""
@@ -38,24 +38,24 @@ log.info """
 
          Used parameters:
         -------------------------------------------
-         --runfolder        : ${params.runfolder}
-         --samplesheet      : ${params.samplesheet}
-         --outdir           : ${params.outdir}
-         --multiqc_config   : ${params.multiqc_config}
-         --title            : ${params.title}
-         --load_threads     : ${params.load_threads}
-         --proc_threads     : ${params.proc_threads}
-         --write_threads    : ${params.write_threads}
+         --runfolder            : ${params.runfolder}
+         --samplesheet          : ${params.samplesheet}
+         --outdir               : ${params.outdir}
+         --multiqc_config       : ${params.multiqc_config}
+         --title                : ${params.title}
+         --load_threads         : ${params.load_threads}
+         --proc_threads         : ${params.proc_threads}
+         --write_threads        : ${params.write_threads}
 
          Runtime data:
         -------------------------------------------
-         Running with profile:   ${ANSI_GREEN}${workflow.profile}${ANSI_RESET}
-         Used container:         ${ANSI_GREEN}${workflow.container}${ANSI_RESET}
-         Running as user:        ${ANSI_GREEN}${workflow.userName}${ANSI_RESET}
-         Launch dir:             ${ANSI_GREEN}${workflow.launchDir}${ANSI_RESET}
-         Base dir:               ${ANSI_GREEN}${baseDir}${ANSI_RESET}
-         Number of cores:        ${ANSI_GREEN}${ncores}${ANSI_RESET}
-         Nextflow version        ${ANSI_GREEN}${nextflow.version}${ANSI_RESET}
+         Running with profile   : ${ANSI_GREEN}${workflow.profile}${ANSI_RESET}
+         Used container         : ${ANSI_GREEN}${workflow.container}${ANSI_RESET}
+         Running as user        : ${ANSI_GREEN}${workflow.userName}${ANSI_RESET}
+         Launch dir             : ${ANSI_GREEN}${workflow.launchDir}${ANSI_RESET}
+         Base dir               : ${ANSI_GREEN}${baseDir}${ANSI_RESET}
+         Number of host cores   : ${ANSI_GREEN}${ncores}${ANSI_RESET}
+         Nextflow version       : ${ANSI_GREEN}${nextflow.version}${ANSI_RESET}
          """
          .stripIndent()
 
@@ -67,14 +67,14 @@ log.info """
          This pipeline takes an Illumina run output folder and runs the Illumina executables
          InterOp summary (sequencing run metrics) and bcl2fastq (converts bcl to fastq).
          By default, the file SampleSheet.csv from the runfolder is used in bcl2fastq, but another sample sheet file can be provided.
-         The resulting fastq files are saved under ${ANSI_GREEN}results/fastq${ANSI_RESET}.
+         The resulting fastq files are saved under ${ANSI_GREEN}results-bcl/fastq${ANSI_RESET}.
          The number of threads used by bcl2fastq are set to 4. If you know what you are doing,
          you can set them using the respective parameters.
 
          Usage:
         -------------------------------------------
          --runfolder        : Illumina run folder
-         --outdir           : where results will be saved, default is "results"
+         --outdir           : where results will be saved, default is "results-bcl"
          --samplesheet      : sample sheet file, default is runfolder/SampleSheet.csv
          --multiqc_config   : config file for MultiQC, default is "multiqc_config.yml"
          --title            : MultiQC report title, default is "InterOp and bcl2fastq summary"
