@@ -120,7 +120,7 @@ process interop {
 process bcl {
 
     tag "bcl2fastq"
-    publishDir params.outdir, mode: 'copy', pattern: '**fastq.gz'
+    publishDir params.outdir, mode: 'copy', pattern: 'fastq/**fastq.gz'
 
     input:
         path x from runfolder_bcl
@@ -129,7 +129,7 @@ process bcl {
     // path is preferred over file as an output qualifier
     output:
         path 'fastq/Stats/Stats.json' into bcl_ch
-        path '**fastq.gz' // ** is for recursive match, directories are omitted (the fastq files might be in fastq/someproject/...)
+        path 'fastq/**fastq.gz' // ** is for recursive match, directories are omitted (the fastq files might be in fastq/someproject/...)
 
     // default to --ignore-missing all?
     script:
