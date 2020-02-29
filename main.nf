@@ -21,8 +21,8 @@ ANSI_RESET = "\033[0m"
  params.title = "InterOp and bcl2fastq summary"
  params.multiqc_config = "$baseDir/multiqc_config.yml" //in case ncct multiqc config needed
  params.help = ""
- params.load_threads = 4
- params.proc_threads = 4
+ params.load_threads = Math.floor(ncores*0.8).toInteger()
+ params.proc_threads = Math.floor(ncores*0.8).toInteger()
  params.write_threads = 4 //must not be higher than number of samples
 
  mqc_config = file(params.multiqc_config) // this is needed, otherwise the multiqc config file is not available in the docker image
