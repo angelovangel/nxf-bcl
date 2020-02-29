@@ -10,20 +10,37 @@ ANSI_RESET = "\033[0m"
 /*
  * pipeline input parameters
  */
-// use bcl test data from https://github.com/roryk/tiny-test-data/tree/master/flowcell
+// use bcl test data from Illumina basespace
  
 // get docker ncores, not nextflow env ncores!!
- int ncores   = Runtime.getRuntime().availableProcessors(); 
+ int ncores       = Runtime.getRuntime().availableProcessors(); 
+ int usable_cores = Math.floor(ncores*0.8).toInteger()
 
- params.runfolder = ""
+ params.runfolder   = ""
  params.samplesheet = "${params.runfolder}/SampleSheet.csv"
+ 
+ // find number of samples in order to dynamically set write_threads, must NOT be higher than number of samples
+ def sample_index = file(params.samplesheet)
+        .readLines()
+        .findLastIndexOf {it =~ "Sample_ID"}
+ 
+ def total_lines = file(params.samplesheet)
+        .countLines()
+ 
+ def nsamples = total_lines - (sample_index + 1)
+ //println "total_lines: $total_lines, sample_index: $sample_index, nsamples: $nsamples"
+ 
  params.outdir = "$workflow.launchDir/results-bcl"
  params.title = "InterOp and bcl2fastq summary"
  params.multiqc_config = "$baseDir/multiqc_config.yml" //in case ncct multiqc config needed
  params.help = ""
- params.load_threads = Math.floor(ncores*0.8).toInteger()
- params.proc_threads = Math.floor(ncores*0.8).toInteger()
- params.write_threads = 4 //must not be higher than number of samples
+ params.load_threads = usable_cores
+ params.proc_threads = usable_cores
+ if (nsamples >= usable_cores) {
+     params.write_threads = usable_cores
+     } else {
+     params.write_threads = nsamples
+         } //must not be higher than number of samples
 
  mqc_config = file(params.multiqc_config) // this is needed, otherwise the multiqc config file is not available in the docker image
 
@@ -55,6 +72,7 @@ log.info """
          Launch dir             : ${ANSI_GREEN}${workflow.launchDir}${ANSI_RESET}
          Base dir               : ${ANSI_GREEN}${baseDir}${ANSI_RESET}
          Number of host cores   : ${ANSI_GREEN}${ncores}${ANSI_RESET}
+         Estimated # of samples : ${ANSI_GREEN}${nsamples}${ANSI_RESET}
          Nextflow version       : ${ANSI_GREEN}${nextflow.version}${ANSI_RESET}
          """
          .stripIndent()
