@@ -74,6 +74,7 @@ log.info """
          Number of host cores   : ${ANSI_GREEN}${ncores}${ANSI_RESET}
          Estimated # of samples : ${ANSI_GREEN}${nsamples}${ANSI_RESET}
          Nextflow version       : ${ANSI_GREEN}${nextflow.version}${ANSI_RESET}
+        ===========================================
          """
          .stripIndent()
 
