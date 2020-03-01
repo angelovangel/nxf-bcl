@@ -141,6 +141,7 @@ process bcl {
 
     tag "bcl2fastq"
     publishDir params.outdir, mode: 'copy', pattern: 'fastq/**fastq.gz'
+    publishDir params.outdir, mode: 'copy', pattern: 'bcl_out.log'
     scratch params.scratch
     /* I use this scratch to be able to tail -f the bcl_out file, to monitor progress in the shiny app
     echo works but with delay, while this is real time*/
@@ -154,7 +155,7 @@ process bcl {
     output:
         path 'fastq/Stats/Stats.json' into bcl_ch
         path 'fastq/**fastq.gz' // ** is for recursive match, directories are omitted (the fastq files might be in fastq/someproject/...)
-        path 'bcl_out'
+        path 'bcl_out.log'
     
     // default to --ignore-missing all?
     script:
@@ -167,7 +168,7 @@ process bcl {
     --ignore-missing-bcls \
     -r ${params.load_threads} \
     -p ${params.proc_threads} \
-    -w ${params.write_threads} >bcl_out 2>&1
+    -w ${params.write_threads} >bcl_out.log 2>&1
     """
 }
 
