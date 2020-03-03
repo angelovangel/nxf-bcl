@@ -178,6 +178,7 @@ process multiqc {
     input:
         file interop_file from interop_ch
         file 'Stats.json' from bcl_ch
+        file mqc_config
 
     output:
         file 'multiqc_report.html'
@@ -186,7 +187,9 @@ process multiqc {
     """
     multiqc --force --interactive \
     --title "${params.title}" \
-    --filename "multiqc_report.html" $interop_file Stats.json
+    --config $mqc_config \
+    --filename "multiqc_report.html" \
+    $interop_file Stats.json
     """
 }
 //=============================
