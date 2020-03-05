@@ -7,6 +7,11 @@ ANSI_GREEN = "\033[1;32m"
 ANSI_RED = "\033[1;31m"
 ANSI_RESET = "\033[0m"
 
+// exit early if help
+if (params.help) {
+    helpMessage()
+    exit(0)
+}
 /*
  * pipeline input parameters
  */
@@ -45,10 +50,6 @@ ANSI_RESET = "\033[0m"
 
  mqc_config = file(params.multiqc_config) // this is needed, otherwise the multiqc config file is not available in the docker image
 
-if (params.help) {
-    helpMessage()
-    exit(0)
-}
 
 log.info """
         ===========================================
