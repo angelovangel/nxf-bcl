@@ -8,6 +8,7 @@ ANSI_RED = "\033[1;31m"
 ANSI_RESET = "\033[0m"
 
 // exit early if help
+params.help = ""
 if (params.help) {
     helpMessage()
     exit(0)
@@ -38,7 +39,6 @@ if (params.help) {
  params.outdir = "$workflow.launchDir/results-bcl"
  params.title = "InterOp and bcl2fastq summary"
  params.multiqc_config = "$baseDir/multiqc_config.yml" //in case ncct multiqc config needed
- params.help = ""
  params.load_threads = usable_cores
  params.proc_threads = usable_cores
  params.scratch = false // used in special cases, stages the bcl process in a local dir
@@ -116,7 +116,7 @@ Channel
     .ifEmpty { error "Can not find folder ${runfolder_repaired}" }
     .set {runfolder_ch}
 Channel
-    .fromPath(params.samplesheet)
+    .fromPath(params.samplesheet, checkIfExists: true, type: 'file')
     .set {samplesheet_ch}
 
 runfolder_ch.into {runfolder_interop; runfolder_bcl}
@@ -149,7 +149,7 @@ process bcl {
     
     input:
         path x from runfolder_bcl
-        //path y from samplesheet_ch
+        path y from samplesheet_ch
 
     // path is preferred over file as an output qualifier
     
@@ -164,7 +164,7 @@ process bcl {
     """
     bcl2fastq -R $x \
     -o fastq \
-    --sample-sheet ${params.samplesheet} \
+    --sample-sheet $y \
     --no-lane-splitting \
     --ignore-missing-bcls \
     -r ${params.load_threads} \
