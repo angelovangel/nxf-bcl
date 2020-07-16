@@ -41,6 +41,7 @@ if (params.help) {
  params.multiqc_config = "$baseDir/multiqc_config.yml" //in case ncct multiqc config needed
  params.load_threads = usable_cores
  params.proc_threads = usable_cores
+ params.barcode_mismatches = 1 // default of bcl2fastq. Allows 0,1,2, so set limits also here
  params.scratch = false // used in special cases, stages the bcl process in a local dir
  if (nsamples >= usable_cores) {
      params.write_threads = usable_cores
@@ -65,6 +66,7 @@ log.info """
          --load_threads         : ${params.load_threads}
          --proc_threads         : ${params.proc_threads}
          --write_threads        : ${params.write_threads}
+         --barcode_mismatches   : ${params.barcode_mismatches}
 
          Runtime data:
         -------------------------------------------
@@ -94,14 +96,15 @@ log.info """
 
          Usage:
         -------------------------------------------
-         --runfolder        : Illumina run folder
-         --outdir           : where results will be saved, default is "results-bcl"
-         --samplesheet      : sample sheet file, default is runfolder/SampleSheet.csv
-         --multiqc_config   : config file for MultiQC, default is "multiqc_config.yml"
-         --title            : MultiQC report title, default is "InterOp and bcl2fastq summary"
-         --load_threads     : Number of threads used for loading BCL data. 4 by default.
-         --proc_threads     : Number of threads used for processing demultiplexed data. 4 by default.
-         --write_threads    : number of threads used for writing FASTQ data. ${ANSI_RED}Must not be higher than number of samples!${ANSI_RESET} 4 by default.
+         --runfolder            : Illumina run folder
+         --outdir               : where results will be saved, default is "results-bcl"
+         --samplesheet          : sample sheet file, default is runfolder/SampleSheet.csv
+         --multiqc_config       : config file for MultiQC, default is "multiqc_config.yml"
+         --title                : MultiQC report title, default is "InterOp and bcl2fastq summary"
+         --load_threads         : Number of threads used for loading BCL data. 4 by default.
+         --proc_threads         : Number of threads used for processing demultiplexed data. 4 by default.
+         --write_threads        : number of threads used for writing FASTQ data. ${ANSI_RED}Must not be higher than number of samples!${ANSI_RESET} 4 by default.
+         --barcode_mismatches:  : number of allowed barcode mismatches per index, 1 by default. Accepted values: 0,1,2.
         ===========================================
          """
          .stripIndent()
@@ -167,6 +170,7 @@ process bcl {
     --sample-sheet $y \
     --no-lane-splitting \
     --ignore-missing-bcls \
+    --barcode-mismatches ${params.barcode_mismatches} \
     -r ${params.load_threads} \
     -p ${params.proc_threads} \
     -w ${params.write_threads} >bcl_out.log 2>&1
