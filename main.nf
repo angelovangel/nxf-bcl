@@ -187,6 +187,7 @@ process multiqc {
 
     output:
         file 'multiqc_report.html'
+        path 'multiqc_report_data' type 'dir'
 
     script:
     """
