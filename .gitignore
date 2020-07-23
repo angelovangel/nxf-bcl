@@ -1,6 +1,6 @@
 testdata
 .DS_Store
-results-bcl*
+results*
 work
 .nextflow*
 nextflow-private*

@@ -117,12 +117,12 @@ runfolder_repaired = "${params.runfolder}".replaceFirst(/$/, "/")
 Channel
     .fromPath(runfolder_repaired, checkIfExists: true, type: 'dir')
     .ifEmpty { error "Can not find folder ${runfolder_repaired}" }
-    .set {runfolder_ch}
+    .into {runfolder_interop; runfolder_bcl}
 Channel
     .fromPath(params.samplesheet, checkIfExists: true, type: 'file')
     .set {samplesheet_ch}
 
-runfolder_ch.into {runfolder_interop; runfolder_bcl}
+//runfolder_ch.into {runfolder_interop; runfolder_bcl}
 
 process interop {
     tag "interop on $x"
