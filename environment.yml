@@ -6,4 +6,4 @@ channels:
 dependencies:
   - bcl2fastq
   - illumina-interop
-  - multiqc=1.8
+  - multiqc=1.8 # do not update!

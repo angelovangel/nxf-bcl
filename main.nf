@@ -145,6 +145,7 @@ process bcl {
 
     tag "bcl2fastq"
     publishDir params.outdir, mode: 'copy', pattern: 'fastq/**fastq.gz'
+    //publishDir params.outdir, mode: 'copy', pattern: 'fastq/Stats/*'
     publishDir params.outdir, mode: 'copy', pattern: 'bcl_out.log'
     scratch params.scratch
     /* I use this scratch to be able to tail -f the bcl_out file, to monitor progress in the shiny app
@@ -186,7 +187,8 @@ process multiqc {
         file mqc_config
 
     output:
-        file 'multiqc_report.html'
+        path 'multiqc_report.html'
+        path 'multiqc_report_data/multiqc_general_stats.txt' into excel_ch
         path 'multiqc_report_data' type 'dir'
 
     script:
@@ -198,6 +200,24 @@ process multiqc {
     $interop_file Stats.json
     """
 }
+
+// take the multiqc_general_stats.txt and write an excel file from it
+process excel {
+    publishDir params.outdir, mode: 'copy'
+
+    input:
+        path mqc_stats from excel_ch
+    
+    output:
+        path 'multiqc_general_stats.xlsx'
+    
+    script:
+    """
+    write_excel.R $mqc_stats
+    """
+
+}
+
 //=============================
 workflow.onComplete {
     if (workflow.success) {
