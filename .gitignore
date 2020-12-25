@@ -5,3 +5,4 @@ work
 .nextflow*
 nextflow-private*
 test-bcl-folder
+report*
