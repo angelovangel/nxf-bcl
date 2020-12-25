@@ -1,7 +1,7 @@
 FROM continuumio/miniconda:4.7.12
 LABEL author="Angel Angelov <aangeloo@gmail.com>"
 
-LABEL description="Docker image containing all requirements for the nextflow-bcl pipeline"
+LABEL description="Docker image containing all requirements for the nxf-bcl pipeline"
 
 COPY environment.yml .
 RUN conda env update -n root -f environment.yml && conda clean -afy
