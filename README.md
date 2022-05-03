@@ -1,5 +1,6 @@
 # nxf-bcl
 
+xx
 A simple [nextflow](https://www.nextflow.io/) pipeline for obtaining Illumina run metrics (InterOp) and generation of fastq files (bcl2fastq). The input is an Illumina run folder (with bcl files) and a SampleSheet.csv file. So far tested with runs from NextSeq and MiSeq machines. Run it with:
 
 ```bash
