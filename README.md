@@ -1,7 +1,6 @@
 # nxf-bcl
 
-xx
-A simple [nextflow](https://www.nextflow.io/) pipeline for obtaining Illumina run metrics (InterOp) and generation of fastq files (bcl2fastq). The input is an Illumina run folder (with bcl files) and a SampleSheet.csv file. So far tested with runs from NextSeq and MiSeq machines. Run it with:
+A simple [nextflow](https://www.nextflow.io/) pipeline for obtaining Illumina run metrics (InterOp) and generation of fastq files (`bcl2fastq`) from Illumina raw data. The input is an Illumina run folder (with bcl files) and a SampleSheet.csv file. The pipeline has been tested with runs from all Illumina machines. Run it with:
 
 ```bash
 nextflow run angelovangel/nxf-bcl --runfolder illumina_folder
@@ -23,7 +22,7 @@ nextflow run angelovangel/nxf-bcl -profile test
 # might take some time to get the data from amazon
 ```
 
-*Tip* - you can then run the [angelovangel/nxf-fastqc](https://github.com/angelovangel/nxf-fastqc) pipeline on the fastq files to get data on their quality and filter/trim them.   
+*Tip* - For generating the required sample sheet you can use the [sample sheet generator app](https://github.com/angelovangel/samplesheet-generator), and for analysis of the generated fastq files you can run the [angelovangel/nxf-fastqc](https://github.com/angelovangel/nxf-fastqc) pipeline.   
 
 And finally, if you don't have nextflow [go get it!](https://www.nextflow.io/)  
 Cheers!
