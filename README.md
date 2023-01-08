@@ -26,3 +26,7 @@ nextflow run angelovangel/nxf-bcl -profile test
 
 And finally, if you don't have nextflow [go get it!](https://www.nextflow.io/)  
 Cheers!
+
+*Update 08-01-2023*
+
+Use `nextflow run -dsl1 ...`, the pipeline is still using DSL1 syntax
